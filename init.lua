@@ -1,4 +1,4 @@
-function mod_loaded(str)
+local function mod_loaded(str)
   if minetest.get_modpath(str) ~= nil then
     return true
   else
@@ -62,11 +62,15 @@ bens_gear.add_charm({
 	valid_tools = { --the charm can only be applied to the following tools
 		pickaxe = "bens_gear_charms_extended_range.png",
 		axe = "bens_gear_charms_extended_range_axe.png",
-		shovel = "bens_gear_charms_extended_range.png"
+		shovel = "bens_gear_charms_extended_range.png",
+		hoe = "bens_gear_charms_extended_range.png"
 	},
 	charm_function = function(tool_type,tool_data,ore_data,rod_data)
 		tool_data.range = ((tool_data.range or 4) * 2) + 1
-		tool_data.wield_scale = {x = 2, y = 2, z = 1}
+		tool_data.wield_scale = {x = 2, y = 2, z = 1} --this doesn't work on hoes currently :(
+		if (tool_data.tool_capabilities == nil) then
+			return
+		end
 		for i, thing in pairs(tool_data.tool_capabilities.groupcaps) do
 			tool_data.tool_capabilities.groupcaps[i] = bens_gear.multiply_times(thing,1.30)
 		end
